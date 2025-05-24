@@ -1,5 +1,5 @@
 // Inclusão do arquivo de cabeçalho que contém a declaração da função
-#include "include/xor_cipher.h"
+#include "xor_cipher.h"
 
 /**
  * Função para aplicar cifra XOR (criptografia/decifração)
@@ -22,3 +22,4 @@ void xor_encrypt(const uint8_t *input, uint8_t *output, size_t len, uint8_t key)
         output[i] = input[i] ^ key;
     }
 }
+
