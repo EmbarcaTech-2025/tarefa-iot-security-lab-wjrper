@@ -1,33 +1,32 @@
-/* subscriber.c  –  Recebe, decifra XOR e bloqueia replay            */
+/* subscriber.c  –  Recebe JSON puro e bloqueia replay */
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 #include "MQTTClient.h"      /* libpaho-mqtt3c */
-#include "xor_cipher.h"      /* mesma função usada no firmware */
 
 #define HOST    "tcp://127.0.0.1:1883"
 #define TOPIC   "escola/sala1/temperatura"
 #define USER    "aluno"
 #define PASSWD  "senha123"
-#define XOR_KEY 42
 
 static uint32_t ultima_ts = 0;
 
 /* ------------------------------------------------------------------ */
 /* Callback de mensagem                                               */
-/*  - Precisa devolver int (Paho espera 1 = handled)                  */
 /* ------------------------------------------------------------------ */
 static int msg_cb(void *ctx, char *topic, int tlen, MQTTClient_message *msg)
 {
     char plain[64];
 
-    /* 1. Decifra XOR */
-    xor_encrypt(msg->payload, (uint8_t *)plain, msg->payloadlen, XOR_KEY);
+    /* 1. Copia payload puro */
+    memcpy(plain, msg->payload, msg->payloadlen);
     plain[msg->payloadlen] = '\0';
+
+    printf("Recebido: %s\n", plain);
 
     /* 2. Extrai valor e timestamp */
     float    valor;
     uint32_t ts;
-    printf("Recebido: %s\n", plain);
     if (sscanf(plain, "{\"valor\":%f,\"ts\":%u}", &valor, &ts) != 2) {
         puts("Parse ERROR");
         goto done;
@@ -53,10 +52,8 @@ int main(void)
     MQTTClient_create(&cli, HOST, "pc_sub",
                       MQTTCLIENT_PERSISTENCE_NONE, NULL);
 
-    /* ✅ Registra o callback ANTES de conectar */
     MQTTClient_setCallbacks(cli, NULL, NULL, msg_cb, NULL);
 
-    /* Configura opções de conexão */
     MQTTClient_connectOptions co = MQTTClient_connectOptions_initializer;
     co.username = USER;
     co.password = PASSWD;
@@ -73,7 +70,6 @@ int main(void)
     MQTTClient_subscribe(cli, TOPIC, 0);
     puts("Inscrito no tópico!");
 
-    /* Loop infinito – callbacks rodam dentro do yield */
     while (1) MQTTClient_yield();
 
     return 0;
