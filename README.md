@@ -134,11 +134,5 @@ Replay detectado! ts=1716589200 <= 1716589200
 
 ---
 
-## 📝 Licença
-
-Este projeto é de uso educacional, sem fins lucrativos.
-
----
-
 ## 📜 Licença
 GNU GPL-3.0.
