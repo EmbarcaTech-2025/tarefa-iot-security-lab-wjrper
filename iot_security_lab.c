@@ -19,7 +19,7 @@ int main(void)
         int len = snprintf(plain, sizeof plain,
                            "{\"valor\":26.5,\"ts\":%lu}", time(NULL));
 
-        // ✅ Publica JSON puro (sem cifrar)
+        // ✅ Publica JSON puro
         mqtt_comm_publish(topic, (uint8_t*)plain, len);
 
         //Se quiser cifrar, descomenta abaixo:
