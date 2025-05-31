@@ -16,6 +16,10 @@ Brasília, 29 de Maio 2025
 
 Projeto desenvolvido para o laboratório de segurança em sistemas embarcados utilizando a placa **BitDogLab**, comunicação via **MQTT**, mensagens em **JSON**, cifra **XOR** e proteção contra ataques de **replay**.
 
+## 📋 Relatório
+
+Caso não queira ver só o README, acesse o arquivo "Relatorio_IoT_Security_Lab.pdf" para ter acesso ao relatório mais detalhado.
+
 ## 🔧 Tecnologias Utilizadas
 
 - [Raspberry Pi Pico W (BitDogLab)]
